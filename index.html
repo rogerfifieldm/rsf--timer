@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Rocket Strike Timer</title>
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RSF Timer">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0A0A;
+    --red:#FA0101;
+    --silver-light:#CBCFD5;
+    --silver-mid:#8B8D91;
+    --silver-dark:#2A2B2D;
+    --panel:#121213;
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; user-select:none;}
+  html,body{
+    height:100%;
+    background:var(--bg);
+    color:var(--silver-light);
+    font-family:'Barlow Condensed', sans-serif;
+    overscroll-behavior:none;
+  }
+  #app{
+    height:100dvh;
+    width:100vw;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    overflow:hidden;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 18px 0 18px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    opacity:0.9;
+  }
+  .brand img{ height:26px; width:auto; display:block; filter:drop-shadow(0 0 4px rgba(0,0,0,0.6));}
+  .brand-text{ display:flex; flex-direction:column; line-height:1.1; }
+  .brand-line1{
+    font-family:'Rajdhani', sans-serif;
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:0.14em;
+    color:var(--silver-mid);
+  }
+  .brand-line2{
+    font-family:'Rajdhani', sans-serif;
+    font-weight:600;
+    font-size:10px;
+    letter-spacing:0.28em;
+    color:var(--red);
+  }
+  .icon-btn{
+    background:none;
+    border:none;
+    color:var(--silver-mid);
+    font-family:'Barlow Condensed';
+    font-size:13px;
+    letter-spacing:.08em;
+    padding:6px 10px;
+    border:1px solid var(--silver-dark);
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .icon-btn:active{ background:var(--panel); }
+
+  /* ---------- MODE / ROUND STRIP ---------- */
+  .status-strip{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding-top:6px;
+  }
+  .mode-label{
+    font-family:'Rajdhani';
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:.18em;
+    color:var(--silver-mid);
+    text-transform:uppercase;
+  }
+  .dot{ width:3px; height:3px; border-radius:50%; background:var(--silver-dark); }
+
+  /* ---------- MAIN RING + TIME ---------- */
+  main{
+    position:relative;
+    flex:1;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .ring-wrap{
+    position:relative;
+    width:min(78vw, 420px);
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  svg.ring{ position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); }
+  .ring-track{ fill:none; stroke:var(--silver-dark); stroke-width:3; }
+  .ring-progress{
+    fill:none;
+    stroke:var(--red);
+    stroke-width:5;
+    stroke-linecap:round;
+    transition:stroke-dashoffset .25s linear, stroke .2s ease;
+  }
+  .ring-progress.rest{ stroke:var(--silver-light); }
+  .ring-ticks{ stroke:var(--silver-dark); stroke-width:1; opacity:.5; }
+
+  .center-content{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:2px;
+    z-index:2;
+  }
+  .phase-label{
+    font-family:'Rajdhani';
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.3em;
+    color:var(--red);
+    text-transform:uppercase;
+    transition:color .2s ease;
+  }
+  .phase-label.rest{ color:var(--silver-light); }
+  .time-display{
+    font-family:'Rajdhani';
+    font-weight:700;
+    font-size:min(20vw, 96px);
+    line-height:1;
+    letter-spacing:.01em;
+    color:var(--silver-light);
+    font-variant-numeric:tabular-nums;
+    transition:color .15s ease, transform .15s ease;
+  }
+  .time-display.urgent{ color:var(--red); }
+  .round-count{
+    font-family:'Barlow Condensed';
+    font-weight:600;
+    font-size:16px;
+    letter-spacing:.1em;
+    color:var(--silver-mid);
+    margin-top:6px;
+  }
+  .round-count b{ color:var(--silver-light); font-weight:700; }
+
+  @keyframes pulse{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.035); }
+  }
+  .time-display.pulsing{ animation:pulse 1s ease-in-out infinite; }
+
+  /* ---------- CONTROLS ---------- */
+  footer{
+    width:100%;
+    padding:0 24px calc(20px + env(safe-area-inset-bottom)) 24px;
+  }
+  .controls{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+  }
+  .btn{
+    font-family:'Rajdhani';
+    font-weight:700;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    border-radius:14px;
+    border:1px solid var(--silver-dark);
+    background:var(--panel);
+    color:var(--silver-light);
+    padding:16px 0;
+    flex:1;
+    font-size:15px;
+    text-align:center;
+  }
+  .btn:active{ background:#1b1b1c; }
+  .btn.primary{
+    background:var(--red);
+    border-color:var(--red);
+    color:#0A0A0A;
+    flex:1.4;
+  }
+  .btn.primary:active{ background:#d10000; }
+  .btn.ghost{ color:var(--silver-mid); }
+
+  /* ---------- MODE SHEET ---------- */
+  .sheet-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.6);
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:10;
+  }
+  .sheet-backdrop.open{ opacity:1; pointer-events:auto; }
+  .sheet{
+    position:fixed; left:0; right:0; bottom:0;
+    background:var(--panel);
+    border-top:1px solid var(--silver-dark);
+    border-radius:20px 20px 0 0;
+    padding:18px 18px calc(24px + env(safe-area-inset-bottom)) 18px;
+    transform:translateY(100%);
+    transition:transform .25s ease;
+    z-index:11;
+    max-height:80vh;
+    overflow-y:auto;
+  }
+  .sheet.open{ transform:translateY(0); }
+  .sheet h2{
+    font-family:'Rajdhani'; font-weight:700; letter-spacing:.1em;
+    font-size:14px; color:var(--silver-mid); text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .preset{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 4px; border-bottom:1px solid var(--silver-dark);
+  }
+  .preset:last-child{ border-bottom:none; }
+  .preset-name{ font-family:'Rajdhani'; font-weight:600; font-size:17px; color:var(--silver-light); }
+  .preset-detail{ font-family:'Barlow Condensed'; font-size:13px; color:var(--silver-mid); }
+  .preset-select{
+    font-family:'Rajdhani'; font-weight:700; font-size:12px; letter-spacing:.08em;
+    color:var(--red); border:1px solid var(--red); border-radius:20px; padding:6px 14px; background:none;
+  }
+  .preset.active .preset-select{ background:var(--red); color:#0A0A0A; }
+
+  .custom-row{ display:flex; gap:10px; margin-top:14px; }
+  .field{ flex:1; }
+  .field label{ font-family:'Rajdhani'; font-size:11px; letter-spacing:.08em; color:var(--silver-mid); text-transform:uppercase; display:block; margin-bottom:6px;}
+  .field input{
+    width:100%; background:var(--bg); border:1px solid var(--silver-dark); border-radius:10px;
+    color:var(--silver-light); font-family:'Rajdhani'; font-weight:600; font-size:16px; padding:10px; text-align:center;
+  }
+  .apply-custom{ margin-top:14px; width:100%; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="brand">
+      <img src="rsf-logo.png" alt="RSF">
+      <div class="brand-text">
+        <span class="brand-line1">ROCKET STRIKE</span>
+        <span class="brand-line2">FITNESS</span>
+      </div>
+    </div>
+    <button class="icon-btn" id="modeBtn">MODE</button>
+  </header>
+
+  <div class="status-strip">
+    <span class="mode-label" id="modeName">ROUND TIMER</span>
+  </div>
+
+  <main>
+    <div class="ring-wrap">
+      <svg class="ring" viewBox="0 0 200 200">
+        <circle class="ring-track" cx="100" cy="100" r="90"></circle>
+        <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="90"
+          stroke-dasharray="565.5" stroke-dashoffset="0"></circle>
+      </svg>
+      <div class="center-content">
+        <div class="phase-label" id="phaseLabel">WORK</div>
+        <div class="time-display" id="timeDisplay">00:00</div>
+        <div class="round-count" id="roundCount">ROUND <b>1</b> / 5</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="controls">
+      <button class="btn ghost" id="resetBtn">Reset</button>
+      <button class="btn primary" id="startBtn">Start</button>
+    </div>
+  </footer>
+</div>
+
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<div class="sheet" id="sheet">
+  <h2>Choose Workout</h2>
+  <div id="presetList"></div>
+  <div class="custom-row">
+    <div class="field"><label>Work (sec)</label><input type="number" id="customWork" value="60"></div>
+    <div class="field"><label>Rest (sec)</label><input type="number" id="customRest" value="30"></div>
+    <div class="field"><label>Rounds</label><input type="number" id="customRounds" value="5"></div>
+  </div>
+  <button class="btn primary apply-custom" id="applyCustom">Use Custom</button>
+</div>
+
+<script src="timer.js"></script>
+</body>
+</html>
