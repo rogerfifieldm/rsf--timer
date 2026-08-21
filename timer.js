@@ -52,14 +52,14 @@
 
   // ---------- AUDIO (Web Audio API tones, no file needed) ----------
   let audioCtx = null;
-  function beep(freq = 880, duration = 0.12, type = 'sine') {
+  function beep(freq = 880, duration = 0.12, type = 'sine', volume = 0.35) {
     try {
       audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = type;
       osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.setValueAtTime(volume, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
       osc.connect(gain).connect(audioCtx.destination);
       osc.start();
@@ -105,7 +105,13 @@
       lastTick += 1000;
       secondsLeft -= 1;
 
-      if (secondsLeft <= 3 && secondsLeft > 0) beep(660, 0.08);
+      if (secondsLeft <= 10 && secondsLeft > 0) {
+        // Pitch and volume ramp up the closer we get to zero — more urgent near the end
+        const urgencyFactor = (11 - secondsLeft) / 10; // 0.1 -> 1.0
+        const freq = 500 + (400 * urgencyFactor); // 540 -> 900
+        beep(freq, 0.12, 'square', 0.35 + (0.25 * urgencyFactor));
+        if (secondsLeft <= 3) vibrate(60);
+      }
       if (secondsLeft === 0) {
         advancePhase();
       }
@@ -116,7 +122,7 @@
 
   function advancePhase() {
     vibrate(phase === 'work' ? [120, 60, 120] : [200]);
-    beep(phase === 'work' ? 440 : 880, 0.2, 'square');
+    beep(phase === 'work' ? 440 : 880, 0.25, 'square', 0.5);
 
     if (phase === 'work') {
       phase = 'rest';
