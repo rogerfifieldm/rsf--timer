@@ -42,10 +42,15 @@
     sheet: document.getElementById('sheet'),
     sheetBackdrop: document.getElementById('sheetBackdrop'),
     presetList: document.getElementById('presetList'),
-    customWork: document.getElementById('customWork'),
-    customRest: document.getElementById('customRest'),
+    customWorkMin: document.getElementById('customWorkMin'),
+    customWorkSec: document.getElementById('customWorkSec'),
+    customRestMin: document.getElementById('customRestMin'),
+    customRestSec: document.getElementById('customRestSec'),
     customRounds: document.getElementById('customRounds'),
     applyCustom: document.getElementById('applyCustom'),
+    disclaimerBackdrop: document.getElementById('disclaimerBackdrop'),
+    disclaimerSheet: document.getElementById('disclaimerSheet'),
+    agreeBtn: document.getElementById('agreeBtn'),
   };
 
   const RING_CIRC = 2 * Math.PI * 90; // matches r=90 in svg
@@ -227,8 +232,12 @@
   }
 
   function applyCustom() {
-    const work = Math.max(1, parseInt(el.customWork.value, 10) || 60);
-    const rest = Math.max(0, parseInt(el.customRest.value, 10) || 0);
+    const workMin = Math.max(0, parseInt(el.customWorkMin.value, 10) || 0);
+    const workSec = Math.max(0, Math.min(59, parseInt(el.customWorkSec.value, 10) || 0));
+    const restMin = Math.max(0, parseInt(el.customRestMin.value, 10) || 0);
+    const restSec = Math.max(0, Math.min(59, parseInt(el.customRestSec.value, 10) || 0));
+    const work = Math.max(1, (workMin * 60) + workSec);
+    const rest = Math.max(0, (restMin * 60) + restSec);
     const rounds = Math.max(1, parseInt(el.customRounds.value, 10) || 1);
     state = { presetId: 'custom', work, rest, rounds, modeName: 'Custom Workout' };
     save();
@@ -264,6 +273,20 @@
   el.modeBtn.addEventListener('click', openSheet);
   el.sheetBackdrop.addEventListener('click', closeSheet);
   el.applyCustom.addEventListener('click', applyCustom);
+  el.agreeBtn.addEventListener('click', () => {
+    try { localStorage.setItem('rsf_timer_disclaimer_agreed_v1', 'true'); } catch (e) {}
+    el.disclaimerBackdrop.classList.remove('open');
+    el.disclaimerSheet.classList.remove('open');
+  });
+
+  function checkDisclaimer() {
+    let agreed = false;
+    try { agreed = localStorage.getItem('rsf_timer_disclaimer_agreed_v1') === 'true'; } catch (e) {}
+    if (!agreed) {
+      el.disclaimerBackdrop.classList.add('open');
+      el.disclaimerSheet.classList.add('open');
+    }
+  }
 
   // Prevent double-tap zoom on rapid taps
   let lastTouch = 0;
@@ -276,4 +299,5 @@
   // ---------- INIT ----------
   secondsLeft = state.work;
   render();
+  checkDisclaimer();
 })();
