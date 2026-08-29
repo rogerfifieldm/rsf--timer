@@ -1,5 +1,5 @@
 {
-  "name": "Rocket Strike Timer",
+  "name": "Rocket Strike Fitness Timer",
   "short_name": "RSF Timer",
   "description": "Glanceable round, interval, and Tabata timer for kickboxing, boxing, HIIT, and running.",
   "start_url": "./index.html",
