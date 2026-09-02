@@ -32,6 +32,7 @@
   // ---------- DOM ----------
   const el = {
     timeDisplay: document.getElementById('timeDisplay'),
+    timeUnit: document.getElementById('timeUnit'),
     phaseLabel: document.getElementById('phaseLabel'),
     roundCount: document.getElementById('roundCount'),
     modeName: document.getElementById('modeName'),
@@ -77,13 +78,17 @@
 
   // ---------- RENDER ----------
   function formatTime(s) {
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${m}:${sec.toString().padStart(2, '0')}`;
+    if (s >= 60) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+    return `${s}`;
   }
 
   function render() {
     el.timeDisplay.textContent = formatTime(secondsLeft);
+    el.timeUnit.classList.toggle('visible', secondsLeft < 60);
     el.phaseLabel.textContent = phase === 'work' ? 'WORK' : 'REST';
     el.phaseLabel.classList.toggle('rest', phase === 'rest');
     el.roundCount.innerHTML = `ROUND <b>${currentRound}</b> / ${state.rounds}`;
