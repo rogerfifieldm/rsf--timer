@@ -52,6 +52,10 @@
     customRounds: document.getElementById('customRounds'),
     applyCustom: document.getElementById('applyCustom'),
     restOnlyToggle: document.getElementById('restOnlyToggle'),
+    presetsTabBtn: document.getElementById('presetsTabBtn'),
+    customTabBtn: document.getElementById('customTabBtn'),
+    presetsPanel: document.getElementById('presetsPanel'),
+    customPanel: document.getElementById('customPanel'),
     disclaimerBackdrop: document.getElementById('disclaimerBackdrop'),
     disclaimerSheet: document.getElementById('disclaimerSheet'),
     agreeBtn: document.getElementById('agreeBtn'),
@@ -309,6 +313,18 @@
   el.modeBtn.addEventListener('click', openSheet);
   el.sheetBackdrop.addEventListener('click', closeSheet);
   el.applyCustom.addEventListener('click', applyCustom);
+  el.presetsTabBtn.addEventListener('click', () => {
+    el.presetsTabBtn.classList.add('active');
+    el.customTabBtn.classList.remove('active');
+    el.presetsPanel.style.display = '';
+    el.customPanel.style.display = 'none';
+  });
+  el.customTabBtn.addEventListener('click', () => {
+    el.customTabBtn.classList.add('active');
+    el.presetsTabBtn.classList.remove('active');
+    el.customPanel.style.display = '';
+    el.presetsPanel.style.display = 'none';
+  });
   el.agreeBtn.addEventListener('click', () => {
     try { localStorage.setItem('rsf_timer_disclaimer_agreed_v1', 'true'); } catch (e) {}
     el.disclaimerBackdrop.classList.remove('open');
