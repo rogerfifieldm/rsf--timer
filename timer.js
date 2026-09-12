@@ -45,17 +45,7 @@
     sheet: document.getElementById('sheet'),
     sheetBackdrop: document.getElementById('sheetBackdrop'),
     presetList: document.getElementById('presetList'),
-    customWorkMin: document.getElementById('customWorkMin'),
-    customWorkSec: document.getElementById('customWorkSec'),
-    customRestMin: document.getElementById('customRestMin'),
-    customRestSec: document.getElementById('customRestSec'),
-    customRounds: document.getElementById('customRounds'),
-    applyCustom: document.getElementById('applyCustom'),
     restOnlyToggle: document.getElementById('restOnlyToggle'),
-    presetsTabBtn: document.getElementById('presetsTabBtn'),
-    customTabBtn: document.getElementById('customTabBtn'),
-    presetsPanel: document.getElementById('presetsPanel'),
-    customPanel: document.getElementById('customPanel'),
     disclaimerBackdrop: document.getElementById('disclaimerBackdrop'),
     disclaimerSheet: document.getElementById('disclaimerSheet'),
     agreeBtn: document.getElementById('agreeBtn'),
@@ -246,43 +236,80 @@
   function buildPresetList() {
     el.presetList.innerHTML = '';
     PRESETS.forEach(p => {
-      const row = document.createElement('div');
-      row.className = 'preset' + (p.id === state.presetId ? ' active' : '');
-      row.innerHTML = `
-        <div>
-          <div class="preset-name">${p.name}</div>
-          <div class="preset-detail">${p.detail}</div>
+      const isActive = p.id === state.presetId;
+      const workMin = Math.floor(p.work / 60), workSec = p.work % 60;
+      const restMin = Math.floor(p.rest / 60), restSec = p.rest % 60;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'preset-accordion' + (isActive ? ' active' : '');
+      wrap.innerHTML = `
+        <div class="preset-header">
+          <div>
+            <div class="preset-name">${p.name} ${isActive ? '<span class="active-tag">ACTIVE</span>' : ''}</div>
+            <div class="preset-detail">${p.detail}</div>
+          </div>
+          <button class="chevron">&#9662;</button>
         </div>
-        <button class="preset-select">${p.id === state.presetId ? 'Selected' : 'Select'}</button>
+        <div class="preset-expand" style="display:none;">
+          <div class="custom-row">
+            <div class="field">
+              <label>Train</label>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <input type="number" class="p-work-min" value="${workMin}" min="0" style="text-align:center;">
+                <span style="color:var(--silver-mid); font-family:'Rajdhani'; font-size:12px;">min</span>
+                <input type="number" class="p-work-sec" value="${workSec}" min="0" max="59" style="text-align:center;">
+                <span style="color:var(--silver-mid); font-family:'Rajdhani'; font-size:12px;">sec</span>
+              </div>
+            </div>
+          </div>
+          <div class="custom-row">
+            <div class="field">
+              <label>Rest</label>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <input type="number" class="p-rest-min" value="${restMin}" min="0" style="text-align:center;">
+                <span style="color:var(--silver-mid); font-family:'Rajdhani'; font-size:12px;">min</span>
+                <input type="number" class="p-rest-sec" value="${restSec}" min="0" max="59" style="text-align:center;">
+                <span style="color:var(--silver-mid); font-family:'Rajdhani'; font-size:12px;">sec</span>
+              </div>
+            </div>
+          </div>
+          <div class="custom-row">
+            <div class="field"><label>Rounds</label><input type="number" class="p-rounds" value="${p.rounds}"></div>
+          </div>
+          <button class="btn primary select-btn" style="width:100%;">Select</button>
+        </div>
       `;
-      row.querySelector('.preset-select').addEventListener('click', () => applyPreset(p));
-      el.presetList.appendChild(row);
+
+      const header = wrap.querySelector('.preset-header');
+      const expandBox = wrap.querySelector('.preset-expand');
+      const chevronBtn = wrap.querySelector('.chevron');
+      header.addEventListener('click', () => {
+        const isOpen = expandBox.style.display !== 'none';
+        el.presetList.querySelectorAll('.preset-expand').forEach((e) => { e.style.display = 'none'; });
+        el.presetList.querySelectorAll('.chevron').forEach((c) => { c.innerHTML = '&#9662;'; });
+        expandBox.style.display = isOpen ? 'none' : 'block';
+        chevronBtn.innerHTML = isOpen ? '&#9662;' : '&#9652;';
+      });
+
+      wrap.querySelector('.select-btn').addEventListener('click', (evt) => {
+        evt.stopPropagation();
+        const wMin = Math.max(0, parseInt(wrap.querySelector('.p-work-min').value, 10) || 0);
+        const wSec = Math.max(0, Math.min(59, parseInt(wrap.querySelector('.p-work-sec').value, 10) || 0));
+        const rMin = Math.max(0, parseInt(wrap.querySelector('.p-rest-min').value, 10) || 0);
+        const rSec = Math.max(0, Math.min(59, parseInt(wrap.querySelector('.p-rest-sec').value, 10) || 0));
+        const rounds = Math.max(1, parseInt(wrap.querySelector('.p-rounds').value, 10) || 1);
+        const work = Math.max(1, (wMin * 60) + wSec);
+        const rest = Math.max(0, (rMin * 60) + rSec);
+        const restOnly = el.restOnlyToggle.checked;
+        state = { presetId: p.id, work, rest, rounds, modeName: restOnly ? p.name + ' — Rest Only' : p.name, restOnly };
+        save();
+        resetWorkout();
+        buildPresetList();
+        closeSheet();
+      });
+
+      el.presetList.appendChild(wrap);
     });
-  }
-
-  function applyPreset(p) {
-    const restOnly = el.restOnlyToggle.checked;
-    state = { presetId: p.id, work: p.work, rest: p.rest, rounds: p.rounds, modeName: restOnly ? 'RSF Timer — Rest Only' : p.name, restOnly };
-    save();
-    resetWorkout();
-    buildPresetList();
-    closeSheet();
-  }
-
-  function applyCustom() {
-    const workMin = Math.max(0, parseInt(el.customWorkMin.value, 10) || 0);
-    const workSec = Math.max(0, Math.min(59, parseInt(el.customWorkSec.value, 10) || 0));
-    const restMin = Math.max(0, parseInt(el.customRestMin.value, 10) || 0);
-    const restSec = Math.max(0, Math.min(59, parseInt(el.customRestSec.value, 10) || 0));
-    const work = Math.max(1, (workMin * 60) + workSec);
-    const rest = Math.max(0, (restMin * 60) + restSec);
-    const rounds = Math.max(1, parseInt(el.customRounds.value, 10) || 1);
-    const restOnly = el.restOnlyToggle.checked;
-    state = { presetId: 'custom', work, rest, rounds, modeName: restOnly ? 'RSF Timer — Rest Only' : 'RSF Timer', restOnly };
-    save();
-    resetWorkout();
-    buildPresetList();
-    closeSheet();
   }
 
   function openSheet() {
@@ -312,19 +339,6 @@
   el.resetBtn.addEventListener('click', resetWorkout);
   el.modeBtn.addEventListener('click', openSheet);
   el.sheetBackdrop.addEventListener('click', closeSheet);
-  el.applyCustom.addEventListener('click', applyCustom);
-  el.presetsTabBtn.addEventListener('click', () => {
-    el.presetsTabBtn.classList.add('active');
-    el.customTabBtn.classList.remove('active');
-    el.presetsPanel.style.display = '';
-    el.customPanel.style.display = 'none';
-  });
-  el.customTabBtn.addEventListener('click', () => {
-    el.customTabBtn.classList.add('active');
-    el.presetsTabBtn.classList.remove('active');
-    el.customPanel.style.display = '';
-    el.presetsPanel.style.display = 'none';
-  });
   el.agreeBtn.addEventListener('click', () => {
     try { localStorage.setItem('rsf_timer_disclaimer_agreed_v1', 'true'); } catch (e) {}
     el.disclaimerBackdrop.classList.remove('open');
