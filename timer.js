@@ -55,6 +55,10 @@
     disclaimerBackdrop: document.getElementById('disclaimerBackdrop'),
     disclaimerSheet: document.getElementById('disclaimerSheet'),
     agreeBtn: document.getElementById('agreeBtn'),
+    shareBtn: document.getElementById('shareBtn'),
+    shareBackdrop: document.getElementById('shareBackdrop'),
+    shareSheet: document.getElementById('shareSheet'),
+    shareLinkBtn: document.getElementById('shareLinkBtn'),
   };
 
   const RING_CIRC = 2 * Math.PI * 90; // matches r=90 in svg
@@ -309,6 +313,33 @@
     try { localStorage.setItem('rsf_timer_disclaimer_agreed_v1', 'true'); } catch (e) {}
     el.disclaimerBackdrop.classList.remove('open');
     el.disclaimerSheet.classList.remove('open');
+  });
+
+  const STORE_URL = 'https://rocketstrikefitness.gumroad.com/l/strpt';
+
+  el.shareBtn.addEventListener('click', () => {
+    el.shareBackdrop.classList.add('open');
+    el.shareSheet.classList.add('open');
+  });
+  el.shareBackdrop.addEventListener('click', () => {
+    el.shareBackdrop.classList.remove('open');
+    el.shareSheet.classList.remove('open');
+  });
+  el.shareLinkBtn.addEventListener('click', async () => {
+    const shareData = {
+      title: 'RSF Round Timer',
+      text: 'Check out RSF Round Timer — a glanceable workout timer from Rocket Strike Fitness.',
+      url: STORE_URL,
+    };
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch (e) { /* user cancelled — fine */ }
+    } else {
+      try {
+        await navigator.clipboard.writeText(STORE_URL);
+        el.shareLinkBtn.textContent = 'Link Copied!';
+        setTimeout(() => { el.shareLinkBtn.textContent = 'Share Link'; }, 2000);
+      } catch (e) { /* clipboard not available — nothing more we can do */ }
+    }
   });
 
   function checkDisclaimer() {
