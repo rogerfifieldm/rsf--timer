@@ -54,8 +54,8 @@
     settingsBackdrop: document.getElementById('settingsBackdrop'),
     settingsSheet: document.getElementById('settingsSheet'),
     viewDisclaimerBtn: document.getElementById('viewDisclaimerBtn'),
-    disclaimerBackdrop: document.getElementById('disclaimerBackdrop'),
-    disclaimerSheet: document.getElementById('disclaimerSheet'),
+    disclaimerPage: document.getElementById('disclaimerPage'),
+    closeDisclaimerBtn: document.getElementById('closeDisclaimerBtn'),
   };
 
   const RING_CIRC = 2 * Math.PI * 90; // matches r=90 in svg
@@ -381,12 +381,10 @@
   el.viewDisclaimerBtn.addEventListener('click', () => {
     el.settingsBackdrop.classList.remove('open');
     el.settingsSheet.classList.remove('open');
-    el.disclaimerBackdrop.classList.add('open');
-    el.disclaimerSheet.classList.add('open');
+    el.disclaimerPage.style.display = 'block';
   });
-  el.disclaimerBackdrop.addEventListener('click', () => {
-    el.disclaimerBackdrop.classList.remove('open');
-    el.disclaimerSheet.classList.remove('open');
+  el.closeDisclaimerBtn.addEventListener('click', () => {
+    el.disclaimerPage.style.display = 'none';
   });
 
   // Prevent double-tap zoom on rapid taps
