@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rsf-timer-v13-mode-backgrounds';
+const CACHE_NAME = 'rsf-timer-v14-visible-backgrounds';
 const ASSETS = [
   './',
   './index.html',
