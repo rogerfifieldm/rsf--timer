@@ -330,7 +330,7 @@
   .page-card{ border:1px solid var(--silver-dark); border-radius:18px; background:var(--panel); padding:18px; margin-bottom:14px; }
   .page-card h3{ font-family:'Rajdhani'; font-size:19px; color:var(--silver-light); margin-bottom:5px; }
   .page-card p,.page-card a{ font-family:'Barlow Condensed'; font-size:17px; line-height:1.45; }
-  .qr-frame{ width:min(72vw,320px); margin:8px auto 18px; padding:14px; background:#fff; border-radius:18px; }
+  .qr-frame{ width:min(68vw,300px); margin:8px auto 18px; padding:7px; background:#1b1b1b; border:1px solid #484848; border-radius:14px; box-shadow:0 0 18px rgba(180,25,25,.12); }
   .qr-frame img{ width:100%; height:auto; display:block; border-radius:8px; }
   @media (max-height:700px){
     .ring-wrap{ width:min(70vw,350px); }
@@ -368,6 +368,7 @@
         <div class="time-display" id="timeDisplay">00:00</div>
         <div class="time-unit" id="timeUnit">SEC</div>
         <div class="round-count" id="roundCount">ROUND <b>1</b> / 5</div>
+        <div id="strengthWeight" hidden style="font:600 15px Rajdhani,sans-serif;letter-spacing:.1em;color:var(--silver-mid);margin-top:7px;">WEIGHT: 0 LB</div>
       </div>
     </div>
   </main>
@@ -387,7 +388,7 @@
   <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 4px; border-bottom:1px solid var(--silver-dark); margin-bottom:6px;">
     <div style="max-width:75%;">
       <div style="font-family:'Rajdhani'; font-weight:600; font-size:15px; color:var(--silver-light);">Rest-Only Mode</div>
-      <div style="font-family:'Barlow Condensed'; font-size:12px; color:var(--silver-mid); line-height:1.3; margin-top:2px;">For weightlifting — do your set at your own pace, then tap Start to time your rest before the next one.</div>
+      <div style="font-family:'Barlow Condensed'; font-size:12px; color:var(--silver-mid); line-height:1.3; margin-top:2px;">Do your set at your own pace, then tap Start to time rest. Strength Training uses this automatically.</div>
     </div>
     <label class="toggle-switch">
       <input type="checkbox" id="restOnlyToggle">
