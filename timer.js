@@ -116,6 +116,7 @@
     el.strengthWeight.hidden = state.presetId !== 'strength';
     if (state.presetId === 'strength') el.strengthWeight.textContent = `${Number(state.weight) || 0} LB`;
     el.modeName.textContent = state.modeName.toUpperCase();
+    document.getElementById('app').dataset.mode = state.presetId || 'kickbox';
 
     const total = state.presetId === 'strength' ? state.rest : state.restOnly ? state.rest : (phase === 'work' ? state.work : state.rest);
     const fraction = state.presetId === 'strength' && phase === 'set' ? 0 : (total > 0 ? secondsLeft / total : 0);

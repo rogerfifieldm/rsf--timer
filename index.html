@@ -338,6 +338,19 @@
     .time-display{ font-size:min(18vw,92px); }
     .status-strip{ gap:4px; }
   }
+
+  /* V13: restrained sport-specific backdrop; original black remains dominant. */
+  #app { position:relative; isolation:isolate; background:#080809; }
+  #app::before { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    background-image:linear-gradient(180deg,rgba(0,0,0,.70),rgba(0,0,0,.44) 38%,rgba(0,0,0,.62) 70%,rgba(0,0,0,.83)),var(--mode-art,none);
+    background-size:cover,cover; background-position:center,center; opacity:.66; }
+  #app[data-mode="kickbox"] { --mode-art:url('bg-kickbox.svg'); }
+  #app[data-mode="boxing"] { --mode-art:url('bg-boxing.svg'); }
+  #app[data-mode="hiit"] { --mode-art:url('bg-hiit.svg'); }
+  #app[data-mode="tabata"] { --mode-art:url('bg-tabata.svg'); }
+  #app[data-mode="run"] { --mode-art:url('bg-run.svg'); }
+  #app[data-mode="strength"] { --mode-art:url('bg-strength.svg'); }
+  @media (prefers-reduced-transparency:reduce) { #app::before {opacity:.28;} }
 </style>
 </head>
 <body>

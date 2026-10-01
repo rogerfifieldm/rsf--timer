@@ -1,8 +1,15 @@
-const CACHE_NAME = 'rsf-timer-v12-manual-sets';
+const CACHE_NAME = 'rsf-timer-v13-mode-backgrounds';
 const ASSETS = [
   './',
   './index.html',
   './timer.js',
+  './bg-kickbox.svg',
+  './bg-boxing.svg',
+  './bg-hiit.svg',
+  './bg-tabata.svg',
+  './bg-run.svg',
+  './bg-strength.svg',
+
   './manifest.json',
   './icon-64.png',
   './icon-180.png',
