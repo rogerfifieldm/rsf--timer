@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rsf-timer-v8';
+const CACHE_NAME = 'rsf-timer-v10-strength';
 const ASSETS = [
   './',
   './index.html',

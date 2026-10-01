@@ -8,7 +8,7 @@
     { id: 'hiit',     name: 'HIIT Intervals',     work: 40,  rest: 20,  rounds: 8, detail: '0:40 train / 0:20 rest x8' },
     { id: 'tabata',   name: 'Tabata',             work: 20,  rest: 10,  rounds: 8, detail: '0:20 train / 0:10 rest x8' },
     { id: 'run',      name: 'Run / Walk Intervals', work: 300, rest: 90, rounds: 6, detail: '5:00 run / 1:30 walk x6' },
-    { id: 'strength', name: 'Strength Training',  work: 60,  rest: 90,  rounds: 4, detail: '1:00 reps / 1:30 rest x4 — weights, kettlebells, pushups, etc.' },
+    { id: 'strength', name: 'Strength Training',  work: 60,  rest: 90,  rounds: 4, detail: '4 sets · choose your weight · 1:30 rest between sets' },
   ];
 
   const STORAGE_KEY = 'rsf_timer_state_v1';
@@ -21,6 +21,7 @@
     rounds: 5,
     modeName: 'Kickboxing Rounds',
     restOnly: false,
+    weight: 0,
   };
 
   let phase = 'work';       // 'work' | 'rest'
@@ -37,6 +38,7 @@
     timeUnit: document.getElementById('timeUnit'),
     phaseLabel: document.getElementById('phaseLabel'),
     roundCount: document.getElementById('roundCount'),
+    strengthWeight: document.getElementById('strengthWeight'),
     modeName: document.getElementById('modeName'),
     ringProgress: document.getElementById('ringProgress'),
     startBtn: document.getElementById('startBtn'),
@@ -102,6 +104,8 @@
       el.phaseLabel.classList.toggle('rest', phase === 'rest');
       el.roundCount.innerHTML = `ROUND <b>${currentRound}</b> / ${state.rounds}`;
     }
+    el.strengthWeight.hidden = state.presetId !== 'strength';
+    if (state.presetId === 'strength') el.strengthWeight.textContent = `WEIGHT: ${Number(state.weight) || 0} LB`;
     el.modeName.textContent = state.modeName.toUpperCase();
 
     const total = state.restOnly ? state.rest : (phase === 'work' ? state.work : state.rest);
@@ -245,6 +249,7 @@
 
       const wrap = document.createElement('div');
       wrap.className = 'preset-accordion' + (isActive ? ' active' : '');
+      const isStrength = p.id === 'strength';
       wrap.innerHTML = `
         <div class="preset-header">
           <div>
@@ -254,7 +259,7 @@
           <button class="chevron">&#9662;</button>
         </div>
         <div class="preset-expand" style="display:none;">
-          <div class="custom-row">
+          ${isStrength ? `<div class="custom-row"><div class="field"><label>Weight (lb)</label><input type="number" class="p-weight" value="${isActive ? (Number(state.weight) || 0) : 0}" min="0" max="2000" step="0.5" inputmode="decimal"></div></div>` : `<div class="custom-row">
             <div class="field">
               <label>Train</label>
               <div style="display:flex; gap:6px; align-items:center;">
@@ -264,7 +269,7 @@
                 <span style="color:var(--silver-mid); font-family:'Rajdhani'; font-size:14px;">sec</span>
               </div>
             </div>
-          </div>
+          </div>`}
           <div class="custom-row">
             <div class="field">
               <label>Rest</label>
@@ -277,7 +282,7 @@
             </div>
           </div>
           <div class="custom-row">
-            <div class="field"><label>Rounds</label><input type="number" class="p-rounds" value="${p.rounds}"></div>
+            <div class="field"><label>${isStrength ? 'Sets' : 'Rounds'}</label><input type="number" class="p-rounds" value="${isActive ? state.rounds : p.rounds}" min="1" max="100"></div>
           </div>
           <button class="btn primary select-btn" style="width:100%;">Select</button>
         </div>
@@ -296,15 +301,16 @@
 
       wrap.querySelector('.select-btn').addEventListener('click', (evt) => {
         evt.stopPropagation();
-        const wMin = Math.max(0, parseInt(wrap.querySelector('.p-work-min').value, 10) || 0);
-        const wSec = Math.max(0, Math.min(59, parseInt(wrap.querySelector('.p-work-sec').value, 10) || 0));
+        const wMin = isStrength ? 0 : Math.max(0, parseInt(wrap.querySelector('.p-work-min').value, 10) || 0);
+        const wSec = isStrength ? 0 : Math.max(0, Math.min(59, parseInt(wrap.querySelector('.p-work-sec').value, 10) || 0));
         const rMin = Math.max(0, parseInt(wrap.querySelector('.p-rest-min').value, 10) || 0);
         const rSec = Math.max(0, Math.min(59, parseInt(wrap.querySelector('.p-rest-sec').value, 10) || 0));
         const rounds = Math.max(1, parseInt(wrap.querySelector('.p-rounds').value, 10) || 1);
         const work = Math.max(1, (wMin * 60) + wSec);
         const rest = Math.max(0, (rMin * 60) + rSec);
-        const restOnly = el.restOnlyToggle.checked;
-        state = { presetId: p.id, work, rest, rounds, modeName: restOnly ? p.name + ' — Rest Only' : p.name, restOnly };
+        const restOnly = isStrength || el.restOnlyToggle.checked;
+        const weight = isStrength ? Math.max(0, Math.min(2000, Number(wrap.querySelector('.p-weight').value) || 0)) : 0;
+        state = { presetId: p.id, work, rest, rounds, weight, modeName: isStrength ? p.name : (restOnly ? p.name + ' — Rest Only' : p.name), restOnly };
         save();
         resetWorkout();
         buildPresetList();
@@ -390,6 +396,8 @@
   }, { passive: false });
 
   // ---------- INIT ----------
-  secondsLeft = state.work;
+  if (state.presetId === 'strength') state.restOnly = true;
+  secondsLeft = state.restOnly ? state.rest : state.work;
+  phase = state.restOnly ? 'rest' : 'work';
   render();
 })();
