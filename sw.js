@@ -1,8 +1,15 @@
-const CACHE_NAME = 'rsf-timer-v13-background-visibility';
+const CACHE_NAME = 'rsf-timer-v14-athletic-art';
 const ASSETS = [
   './',
   './index.html',
   './timer.js',
+  './athlete-kickbox.svg',
+  './athlete-boxing.svg',
+  './athlete-hiit.svg',
+  './athlete-tabata.svg',
+  './athlete-strength.svg',
+  './athlete-custom.svg',
+
   './manifest.json',
   './icon-64.png',
   './icon-180.png',
