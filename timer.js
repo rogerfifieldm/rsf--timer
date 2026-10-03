@@ -27,7 +27,6 @@
   let phase = 'work';       // 'work' | 'rest'
   let currentRound = 1;
   let secondsLeft = state.work;
-  let strengthComplete = false;
   let running = false;
   let tickHandle = null;
   let lastTick = null;
@@ -97,12 +96,12 @@
     el.timeDisplay.textContent = formatTime(secondsLeft);
     el.timeUnit.classList.toggle('visible', secondsLeft < 60);
     if (state.presetId === 'strength') {
-      el.timeDisplay.textContent = strengthComplete ? 'DONE' : (phase === 'set' ? `SET ${currentRound}` : formatTime(secondsLeft));
-      el.timeDisplay.classList.toggle('strength-set', phase === 'set' && !strengthComplete);
+      el.timeDisplay.textContent = phase === 'set' ? `SET ${currentRound}` : (phase === 'complete' ? 'DONE' : formatTime(secondsLeft));
       el.timeUnit.classList.toggle('visible', phase === 'rest' && secondsLeft < 60);
-      el.phaseLabel.textContent = strengthComplete ? 'COMPLETE' : (phase === 'set' ? 'STRENGTH' : 'REST');
+      el.phaseLabel.textContent = phase === 'set' ? 'STRENGTH' : (phase === 'complete' ? 'COMPLETE' : 'REST');
       el.phaseLabel.classList.toggle('rest', phase === 'rest');
-      el.roundCount.innerHTML = strengthComplete ? `ALL ${state.rounds} SETS FINISHED` : (phase === 'set' ? `OF ${state.rounds}` : `SET <b>${currentRound}</b> / ${state.rounds}`);
+      el.timeDisplay.classList.toggle('strength-set', phase === 'set');
+      el.roundCount.innerHTML = `SET <b>${currentRound}</b> / ${state.rounds}`;
     } else if (state.restOnly) {
       el.phaseLabel.textContent = 'REST';
       el.phaseLabel.classList.add('rest');
@@ -114,9 +113,8 @@
     }
     if (state.presetId !== 'strength') el.timeDisplay.classList.remove('strength-set');
     el.strengthWeight.hidden = state.presetId !== 'strength';
-    if (state.presetId === 'strength') el.strengthWeight.textContent = `${Number(state.weight) || 0} LB`;
+    if (state.presetId === 'strength') el.strengthWeight.textContent = `WEIGHT: ${Number(state.weight) || 0} LB`;
     el.modeName.textContent = state.modeName.toUpperCase();
-    document.getElementById('app').dataset.mode = state.presetId || 'kickbox';
 
     const total = state.presetId === 'strength' ? state.rest : state.restOnly ? state.rest : (phase === 'work' ? state.work : state.rest);
     const fraction = state.presetId === 'strength' && phase === 'set' ? 0 : (total > 0 ? secondsLeft / total : 0);
@@ -124,11 +122,11 @@
     el.ringProgress.style.strokeDashoffset = offset;
     el.ringProgress.classList.toggle('rest', phase === 'rest' || (state.restOnly && state.presetId !== 'strength'));
 
-    const urgent = secondsLeft <= 10 && running;
+    const urgent = secondsLeft <= 10 && running && phase !== 'set';
     el.timeDisplay.classList.toggle('urgent', urgent && !state.restOnly && phase === 'work');
     el.timeDisplay.classList.toggle('pulsing', urgent);
 
-    el.startBtn.textContent = state.presetId === 'strength' ? (strengthComplete ? 'Start Again' : (phase === 'set' ? 'Finish Set' : (running ? 'Pause Rest' : 'Resume Rest'))) : running ? 'Pause' : (secondsLeft === (state.restOnly ? state.rest : (phase === 'work' ? state.work : state.rest)) && currentRound === 1 ? 'Start' : (state.restOnly ? 'Start Next Rest' : 'Resume'));
+    el.startBtn.textContent = state.presetId === 'strength' ? (phase === 'complete' ? 'Start Again' : phase === 'set' ? (currentRound === state.rounds ? 'Finish Final Set' : 'Finish Set') : (running ? 'Pause Rest' : 'Resume Rest')) : running ? 'Pause' : (secondsLeft === (state.restOnly ? state.rest : (phase === 'work' ? state.work : state.rest)) && currentRound === 1 ? 'Start' : (state.restOnly ? 'Start Next Rest' : 'Resume'));
   }
 
   // ---------- TIMER ENGINE ----------
@@ -203,16 +201,15 @@
     running = false;
     cancelAnimationFrame(tickHandle);
     releaseWakeLock();
-    phase = 'work';
+    phase = state.presetId === 'strength' ? 'complete' : 'work';
     currentRound = state.rounds;
     secondsLeft = 0;
-    strengthComplete = state.presetId === 'strength';
     el.timeDisplay.textContent = 'DONE';
     el.timeUnit.classList.remove('visible');
     el.phaseLabel.textContent = 'COMPLETE';
     vibrate([150, 80, 150, 80, 300]);
     beep(990, 0.3, 'square');
-    el.startBtn.textContent = 'Start Again';
+    el.startBtn.textContent = state.presetId === 'strength' ? 'Start Again' : 'Start';
   }
 
   function start() {
@@ -234,7 +231,7 @@
   }
 
   function toggleStart() {
-    if (state.presetId === 'strength' && strengthComplete) { resetWorkout(); return; }
+    if (state.presetId === 'strength' && phase === 'complete') { resetWorkout(); return; }
     if (state.presetId === 'strength' && phase === 'set') {
       if (currentRound >= state.rounds) { finishWorkout(); return; }
       phase = 'rest';
@@ -247,13 +244,12 @@
   }
 
   function resetWorkout() {
-    strengthComplete = false;
     running = false;
     cancelAnimationFrame(tickHandle);
     releaseWakeLock();
     phase = state.presetId === 'strength' ? 'set' : state.restOnly ? 'rest' : 'work';
     currentRound = 1;
-    secondsLeft = state.restOnly ? state.rest : state.work;
+    secondsLeft = state.presetId === 'strength' ? state.rest : (state.restOnly ? state.rest : state.work);
     render();
   }
 

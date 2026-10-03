@@ -124,6 +124,21 @@
     align-items:center;
     justify-content:center;
   }
+  /* V13: visible but restrained red background geometry behind the timer. */
+  main::before{
+    content:"";
+    position:absolute;
+    inset:4% 0;
+    pointer-events:none;
+    background:
+      linear-gradient(174deg,transparent 23%,rgba(250,1,1,.20) 23.15%,rgba(250,1,1,.20) 23.35%,transparent 23.5%),
+      linear-gradient(174deg,transparent 42%,rgba(250,1,1,.14) 42.15%,rgba(250,1,1,.14) 42.35%,transparent 42.5%),
+      linear-gradient(0deg,transparent 56%,rgba(250,1,1,.16) 56.15%,rgba(250,1,1,.16) 56.35%,transparent 56.5%),
+      linear-gradient(90deg,transparent 8%,rgba(110,5,12,.25) 8.1%,rgba(110,5,12,.25) 24%,transparent 24.1%);
+    opacity:.85;
+    z-index:0;
+  }
+  main .ring-wrap{z-index:1;}
   .ring-wrap{
     position:relative;
     width:min(84vw, 460px);
@@ -176,7 +191,6 @@
     font-variant-numeric:tabular-nums;
     transition:color .15s ease, transform .15s ease;
   }
-  .time-display.strength-set{ font-size:clamp(34px, 10vw, 58px); letter-spacing:.025em; white-space:nowrap; }
   .time-display.urgent{ color:var(--red); }
   .time-unit{
     font-family:'Rajdhani'; font-weight:600; font-size:12px; letter-spacing:.2em;
@@ -331,6 +345,7 @@
   .page-card{ border:1px solid var(--silver-dark); border-radius:18px; background:var(--panel); padding:18px; margin-bottom:14px; }
   .page-card h3{ font-family:'Rajdhani'; font-size:19px; color:var(--silver-light); margin-bottom:5px; }
   .page-card p,.page-card a{ font-family:'Barlow Condensed'; font-size:17px; line-height:1.45; }
+  .time-display.strength-set{font-size:clamp(52px,13vw,88px);white-space:nowrap;letter-spacing:.02em;}
   .qr-frame{ width:min(68vw,300px); margin:8px auto 18px; padding:19px; background:#111113; border:2px solid #3c2024; border-radius:18px; box-shadow:0 0 12px rgba(150,15,20,.07); }
   .qr-frame img{ width:100%; height:auto; display:block; border-radius:8px; }
   @media (max-height:700px){
@@ -338,18 +353,6 @@
     .time-display{ font-size:min(18vw,92px); }
     .status-strip{ gap:4px; }
   }
-
-  /* V13: restrained sport-specific backdrop; original black remains dominant. */
-  #app { position:relative; isolation:isolate; background-color:#080809;
-    background-image:linear-gradient(180deg,rgba(0,0,0,.56),rgba(0,0,0,.36) 38%,rgba(0,0,0,.50) 70%,rgba(0,0,0,.75)),var(--mode-art,none);
-    background-size:cover,cover; background-position:center center,center center; background-repeat:no-repeat; }
-  #app[data-mode="kickbox"] { --mode-art:url('bg-kickbox.svg'); }
-  #app[data-mode="boxing"] { --mode-art:url('bg-boxing.svg'); }
-  #app[data-mode="hiit"] { --mode-art:url('bg-hiit.svg'); }
-  #app[data-mode="tabata"] { --mode-art:url('bg-tabata.svg'); }
-  #app[data-mode="run"] { --mode-art:url('bg-run.svg'); }
-  #app[data-mode="strength"] { --mode-art:url('bg-strength.svg'); }
-
 </style>
 </head>
 <body>
@@ -381,7 +384,7 @@
         <div class="time-display" id="timeDisplay">00:00</div>
         <div class="time-unit" id="timeUnit">SEC</div>
         <div class="round-count" id="roundCount">ROUND <b>1</b> / 5</div>
-        <div id="strengthWeight" hidden style="font:600 15px Rajdhani,sans-serif;letter-spacing:.1em;color:var(--silver-mid);margin-top:7px;">0 LB</div>
+        <div id="strengthWeight" hidden style="font:600 15px Rajdhani,sans-serif;letter-spacing:.1em;color:var(--silver-mid);margin-top:7px;">WEIGHT: 0 LB</div>
       </div>
     </div>
   </main>
