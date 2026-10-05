@@ -146,6 +146,9 @@
   main[data-athlete="run"]::before{background-image:url("athlete-run.png")}
   main[data-athlete="strength"]::before{background-image:url("athlete-strength.png")}
   main[data-athlete="custom"]::before{background-image:url("athlete-custom.png")}
+  /* Balance athlete scale so Run and HIIT carry the same visual weight as the other modes. */
+  main[data-athlete="run"]::before,
+  main[data-athlete="hiit"]::before{background-size:clamp(335px,38vw,555px) auto;}
   @media(max-width:700px){
     main::before{
       background-position:left -12vw center;
@@ -156,8 +159,33 @@
     main::after{
       background:radial-gradient(circle at 78% 50%, rgba(255,18,18,.055) 0%, transparent 52%);
     }
+    main[data-athlete="run"]::before,
+    main[data-athlete="hiit"]::before{background-size:min(94vw,455px) auto;}
+    .energy-field{inset:8% 0 6% 42%;opacity:.38;}
+    .ring-wrap::before{inset:-6px;filter:blur(3px) drop-shadow(0 0 7px rgba(250,1,1,.55));}
+    .ring-wrap::after{width:7px;height:7px;}
   }
-  main .ring-wrap{z-index:1;}
+  main .ring-wrap{z-index:2;}
+
+  /* V17 cinematic ambience: fills the open right side without competing with the timer. */
+  .energy-field{
+    position:absolute; inset:5% 0 4% 48%; z-index:1; pointer-events:none; overflow:hidden;
+    opacity:.72;
+    background:
+      radial-gradient(ellipse at 48% 50%, rgba(250,1,1,.12), transparent 45%),
+      repeating-linear-gradient(154deg, transparent 0 58px, rgba(250,1,1,.08) 59px 60px, transparent 61px 112px);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 82%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 82%,transparent 100%);
+  }
+  .energy-field::before,.energy-field::after{
+    content:""; position:absolute; width:72%; height:2px; right:-5%; top:37%;
+    background:linear-gradient(90deg,transparent,rgba(250,1,1,.18),rgba(255,70,70,.8),transparent);
+    box-shadow:0 0 10px rgba(250,1,1,.35); transform:rotate(-11deg);
+    animation:energySweep 5.2s ease-in-out infinite;
+  }
+  .energy-field::after{top:62%; right:5%; width:58%; animation-delay:-2.6s; transform:rotate(8deg); opacity:.65;}
+  @keyframes energySweep{0%,100%{opacity:.2;transform:translateX(5%) rotate(-11deg)}50%{opacity:.9;transform:translateX(-10%) rotate(-11deg)}}
+
   .ring-wrap{
     position:relative;
     width:min(84vw, 460px);
@@ -167,8 +195,25 @@
     justify-content:center;
     border-radius:50%;
     background:radial-gradient(circle at 50% 48%, #151516 0%, #0d0d0e 58%, #080809 76%);
-    box-shadow:inset 0 0 0 1px rgba(203,207,213,.05), 0 14px 45px rgba(0,0,0,.38);
+    box-shadow:inset 0 0 0 1px rgba(203,207,213,.05), 0 14px 45px rgba(0,0,0,.38), 0 0 38px rgba(250,1,1,.08);
   }
+  .ring-wrap::before{
+    content:""; position:absolute; inset:-9px; border-radius:50%; z-index:-1; pointer-events:none;
+    background:conic-gradient(from 0deg, transparent 0 8%, rgba(255,255,255,.92) 10%, rgba(250,1,1,.92) 11%, transparent 15% 47%, rgba(250,1,1,.28) 53%, transparent 60% 83%, rgba(255,255,255,.65) 86%, transparent 89%);
+    filter:blur(4px) drop-shadow(0 0 10px rgba(250,1,1,.65));
+    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 12px),#000 calc(100% - 10px));
+            mask:radial-gradient(farthest-side,transparent calc(100% - 12px),#000 calc(100% - 10px));
+    animation:ringBeam 4.6s linear infinite;
+  }
+  .ring-wrap::after{
+    content:""; position:absolute; width:9px; height:9px; border-radius:50%; right:10%; top:16%; z-index:4;
+    background:#fff; box-shadow:0 0 5px #fff,0 0 12px #ff4545,0 0 25px var(--red),0 0 42px rgba(250,1,1,.75);
+    animation:sparkle 2.3s ease-in-out infinite;
+  }
+  @keyframes ringBeam{to{transform:rotate(360deg)}}
+  @keyframes sparkle{0%,100%{opacity:.28;transform:scale(.55)}45%{opacity:1;transform:scale(1.35)}58%{opacity:.7;transform:scale(.8)}}
+  @media (prefers-reduced-motion:reduce){.ring-wrap::before,.ring-wrap::after,.energy-field::before,.energy-field::after{animation:none}}
+
   svg.ring{ position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); }
   .ring-track{ fill:none; stroke:var(--silver-dark); stroke-width:3; }
   .ring-progress{
@@ -392,6 +437,7 @@
   </div>
 
   <main id="timerStage" data-athlete="kickbox">
+    <div class="energy-field" aria-hidden="true"></div>
     <div class="ring-wrap">
       <svg class="ring" viewBox="0 0 200 200">
         <circle class="ring-track" cx="100" cy="100" r="90"></circle>
