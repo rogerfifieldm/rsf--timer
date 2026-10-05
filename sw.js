@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rsf-timer-v15-premium-athletics';
+const CACHE_NAME = 'rsf-timer-v16-enhanced-athletics';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const ASSETS = [
   './athlete-boxing.png',
   './athlete-hiit.png',
   './athlete-tabata.png',
+  './athlete-run.png',
   './athlete-strength.png',
   './athlete-custom.png',
 
