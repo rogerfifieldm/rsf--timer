@@ -124,22 +124,22 @@
     align-items:center;
     justify-content:center;
   }
-  /* V14: mode-specific athletic art, behind the timer (never covers controls). */
+  /* V15: premium athlete art, behind the timer (never covers controls). */
   main::before{
     content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
-    background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-kickbox.svg");
+    background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-kickbox.png");
     background-repeat:no-repeat;
     background-position:center, left max(4%, calc(50% - 490px)) center;
     background-size:100% 100%, clamp(260px,36vw,480px) auto;
-    opacity:.42;
+    opacity:.57;
   }
-  main[data-athlete="boxing"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-boxing.svg")}
-  main[data-athlete="hiit"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-hiit.svg")}
-  main[data-athlete="tabata"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-tabata.svg")}
-  main[data-athlete="strength"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-strength.svg")}
-  main[data-athlete="custom"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-custom.svg")}
+  main[data-athlete="boxing"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-boxing.png")}
+  main[data-athlete="hiit"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-hiit.png")}
+  main[data-athlete="tabata"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-tabata.png")}
+  main[data-athlete="strength"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-strength.png")}
+  main[data-athlete="custom"]::before{background-image:linear-gradient(90deg,rgba(10,10,10,.25),rgba(10,10,10,.05)),url("athlete-custom.png")}
   @media(max-width:700px){
-    main::before{background-position:center,center;background-size:100% 100%, min(85vw,420px) auto;opacity:.27}
+    main::before{background-position:center,center;background-size:100% 100%, min(85vw,420px) auto;opacity:.38}
   }
   main .ring-wrap{z-index:1;}
   .ring-wrap{
