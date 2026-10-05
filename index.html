@@ -148,7 +148,7 @@
   main[data-athlete="custom"]::before{background-image:url("athlete-custom.png")}
   /* Balance athlete scale so Run and HIIT carry the same visual weight as the other modes. */
   main[data-athlete="run"]::before,
-  main[data-athlete="hiit"]::before{background-size:clamp(335px,38vw,555px) auto;}
+  main[data-athlete="hiit"]::before{background-size:clamp(410px,44vw,650px) auto;}
   @media(max-width:700px){
     main::before{
       background-position:left -12vw center;
@@ -160,30 +160,31 @@
       background:radial-gradient(circle at 78% 50%, rgba(255,18,18,.055) 0%, transparent 52%);
     }
     main[data-athlete="run"]::before,
-    main[data-athlete="hiit"]::before{background-size:min(94vw,455px) auto;}
+    main[data-athlete="hiit"]::before{background-size:min(108vw,520px) auto;}
     .energy-field{inset:8% 0 6% 42%;opacity:.38;}
     .ring-wrap::before{inset:-6px;filter:blur(3px) drop-shadow(0 0 7px rgba(250,1,1,.55));}
     .ring-wrap::after{width:7px;height:7px;}
   }
   main .ring-wrap{z-index:2;}
 
-  /* V17 cinematic ambience: fills the open right side without competing with the timer. */
+  /* V18 cinematic ambience: fills the open right side without competing with the timer. */
   .energy-field{
     position:absolute; inset:5% 0 4% 48%; z-index:1; pointer-events:none; overflow:hidden;
-    opacity:.72;
+    opacity:.88;
     background:
-      radial-gradient(ellipse at 48% 50%, rgba(250,1,1,.12), transparent 45%),
-      repeating-linear-gradient(154deg, transparent 0 58px, rgba(250,1,1,.08) 59px 60px, transparent 61px 112px);
+      radial-gradient(ellipse at 46% 48%, rgba(250,1,1,.18), transparent 42%),
+      radial-gradient(ellipse at 78% 62%, rgba(150,0,0,.12), transparent 38%),
+      repeating-linear-gradient(154deg, transparent 0 52px, rgba(250,1,1,.115) 53px 54px, transparent 55px 104px);
     -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 82%,transparent 100%);
             mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 82%,transparent 100%);
   }
   .energy-field::before,.energy-field::after{
     content:""; position:absolute; width:72%; height:2px; right:-5%; top:37%;
-    background:linear-gradient(90deg,transparent,rgba(250,1,1,.18),rgba(255,70,70,.8),transparent);
-    box-shadow:0 0 10px rgba(250,1,1,.35); transform:rotate(-11deg);
-    animation:energySweep 5.2s ease-in-out infinite;
+    background:linear-gradient(90deg,transparent,rgba(250,1,1,.28),rgba(255,95,95,.95),transparent);
+    box-shadow:0 0 12px rgba(250,1,1,.55),0 0 28px rgba(250,1,1,.20); transform:rotate(-11deg);
+    animation:energySweep 7.5s ease-in-out infinite;
   }
-  .energy-field::after{top:62%; right:5%; width:58%; animation-delay:-2.6s; transform:rotate(8deg); opacity:.65;}
+  .energy-field::after{top:62%; right:5%; width:58%; animation-delay:-3.75s; transform:rotate(8deg); opacity:.65;}
   @keyframes energySweep{0%,100%{opacity:.2;transform:translateX(5%) rotate(-11deg)}50%{opacity:.9;transform:translateX(-10%) rotate(-11deg)}}
 
   .ring-wrap{
@@ -203,12 +204,12 @@
     filter:blur(4px) drop-shadow(0 0 10px rgba(250,1,1,.65));
     -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 12px),#000 calc(100% - 10px));
             mask:radial-gradient(farthest-side,transparent calc(100% - 12px),#000 calc(100% - 10px));
-    animation:ringBeam 4.6s linear infinite;
+    animation:ringBeam 11s linear infinite;
   }
   .ring-wrap::after{
     content:""; position:absolute; width:9px; height:9px; border-radius:50%; right:10%; top:16%; z-index:4;
     background:#fff; box-shadow:0 0 5px #fff,0 0 12px #ff4545,0 0 25px var(--red),0 0 42px rgba(250,1,1,.75);
-    animation:sparkle 2.3s ease-in-out infinite;
+    animation:sparkle 4.8s ease-in-out infinite;
   }
   @keyframes ringBeam{to{transform:rotate(360deg)}}
   @keyframes sparkle{0%,100%{opacity:.28;transform:scale(.55)}45%{opacity:1;transform:scale(1.35)}58%{opacity:.7;transform:scale(.8)}}
