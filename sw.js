@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rsf-timer-v16-enhanced-athletics';
+const CACHE_NAME = 'rsf-timer-v17-cinematic-ring';
 const ASSETS = [
   './',
   './index.html',
