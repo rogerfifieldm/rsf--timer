@@ -583,6 +583,66 @@
     .energy-field{inset:12% -12% 10% 32%;opacity:.82;}
   }
 
+
+  /* ---------- V23 SALES-POLISH / MASTER-REFERENCE VISUAL LAYER ---------- */
+  .app-title{
+    position:relative;
+    font-weight:800;
+    font-size:clamp(22px,2vw,29px);
+    letter-spacing:.16em;
+    color:#f3f5f7;
+    text-shadow:0 1px 0 #fff,0 2px 0 #7c8188,0 0 8px rgba(255,255,255,.22),0 0 18px rgba(250,1,1,.22);
+    background:linear-gradient(180deg,#fff 0%,#d8dce1 42%,#7e858d 54%,#f4f5f6 78%,#a4a9af 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .app-title::before,.app-title::after{
+    content:"";position:absolute;top:50%;width:clamp(30px,6vw,100px);height:1px;
+    background:linear-gradient(90deg,transparent,#fa0101 68%,#fff);box-shadow:0 0 7px #fa0101;
+  }
+  .app-title::before{right:calc(100% + 16px)}
+  .app-title::after{left:calc(100% + 16px);transform:scaleX(-1)}
+  .mode-label{color:#b9bec5;text-shadow:0 0 8px rgba(250,1,1,.28)}
+
+  main{isolation:isolate;overflow:hidden;background:
+    radial-gradient(ellipse at 54% 58%,rgba(120,0,0,.13),transparent 42%),
+    linear-gradient(180deg,#080909 0%,#080909 62%,#0b0808 100%);}
+  /* Smoke and hot cloud bank behind the ring, matching the master reference. */
+  main::after{
+    z-index:0;
+    background:
+      radial-gradient(circle at 64% 31%,#fff 0 2px,#ffb2b2 3px,#ff1010 6px,rgba(255,0,0,.28) 12px,transparent 28px),
+      radial-gradient(ellipse at 67% 47%,rgba(255,0,0,.27) 0 7%,rgba(170,0,0,.18) 18%,transparent 48%),
+      radial-gradient(ellipse at 77% 52%,rgba(255,20,20,.17),transparent 31%),
+      radial-gradient(ellipse at 57% 91%,rgba(255,45,45,.32),rgba(160,0,0,.16) 24%,transparent 58%),
+      repeating-radial-gradient(ellipse at 68% 49%,rgba(255,0,0,.07) 0 2px,transparent 3px 22px);
+    filter:blur(.15px);
+  }
+  .energy-field{inset:4% -4% 3% 37%;opacity:1;filter:none;mask-image:none;-webkit-mask-image:none;background:
+    radial-gradient(circle at 42% 28%,#fff 0 1px,#ff2b2b 2px,transparent 7px),
+    radial-gradient(circle at 61% 40%,#ffb0b0 0 1px,#ff1010 2px,transparent 6px),
+    radial-gradient(circle at 72% 54%,#ff5959 0 1px,transparent 5px),
+    radial-gradient(circle at 53% 66%,#ff3131 0 1px,transparent 4px),
+    radial-gradient(ellipse at 45% 50%,rgba(255,0,0,.23),transparent 43%),
+    conic-gradient(from 302deg at 36% 50%,transparent 0 3deg,rgba(255,60,60,.52) 3.2deg 3.6deg,transparent 3.9deg 8deg,rgba(255,0,0,.27) 8.2deg 8.55deg,transparent 8.8deg 15deg,rgba(255,145,145,.38) 15.2deg 15.55deg,transparent 15.8deg 24deg,rgba(255,0,0,.22) 24.2deg 24.55deg,transparent 24.8deg 360deg);}
+  .energy-field::before{top:29%;left:24%;width:72%;height:2px;background:linear-gradient(90deg,#fff 0,#ff7c7c 5%,#ff0808 19%,rgba(255,0,0,.35) 47%,transparent);box-shadow:0 0 8px #fff,0 0 18px #ff0808;transform:rotate(-18deg)}
+  .energy-field::after{top:62%;left:22%;width:70%;height:2px;background:linear-gradient(90deg,#ffd0d0,#ff2626 8%,rgba(255,0,0,.34) 40%,transparent);box-shadow:0 0 8px rgba(255,40,40,.8);transform:rotate(13deg)}
+
+  /* Multi-layer mechanical illuminated housing. */
+  .ring-wrap{
+    border-radius:50%;
+    background:radial-gradient(circle at 50% 48%,#121314 0 69%,#090a0b 70% 73%,#292b2e 74% 76%,#080909 77% 80%,rgba(250,1,1,.7) 81% 82%,#090909 83% 100%);
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.045),inset 0 0 32px rgba(0,0,0,.95),0 0 0 5px #080909,0 0 0 7px rgba(250,1,1,.18),0 0 22px rgba(255,0,0,.55),0 0 68px rgba(230,0,0,.35),0 32px 62px rgba(0,0,0,.72);
+  }
+  .ring-wrap::before{inset:-3px;padding:3px;background:conic-gradient(from 0deg,transparent 0 4%,rgba(255,255,255,.08) 4.3% 4.7%,transparent 5% 12%,rgba(255,0,0,.16) 12.2% 12.7%,transparent 13% 100%);filter:drop-shadow(0 0 7px rgba(255,0,0,.7));}
+  .ring-wrap::after{left:-18%;right:-18%;height:30%;bottom:-18%;background:radial-gradient(ellipse,#fff 0 1%,#ff8c8c 2%,rgba(255,15,15,.62) 8%,rgba(180,0,0,.27) 27%,transparent 66%);filter:blur(9px);transform:scaleX(1.18)}
+  .ring-track{stroke:#272a2d;stroke-width:7;filter:drop-shadow(0 0 2px rgba(255,255,255,.14))}
+  .ring-progress{stroke-width:6;filter:drop-shadow(0 0 3px #ffb0b0) drop-shadow(0 0 8px #fa0101) drop-shadow(0 0 16px rgba(250,1,1,.7));}
+  .time-display{text-shadow:0 1px 0 #fff,0 0 5px rgba(255,255,255,.28),0 0 13px rgba(250,1,1,.28)}
+  main::before{filter:drop-shadow(0 0 6px rgba(255,160,160,.5)) drop-shadow(0 0 19px rgba(255,0,0,.42)) drop-shadow(0 20px 20px rgba(0,0,0,.55));}
+
+  @media(max-width:800px){.app-title::before,.app-title::after{width:36px}.energy-field{inset:7% -16% 5% 31%}}
+  @media(max-width:600px){.app-title{font-size:21px}.app-title::before,.app-title::after{display:none}.energy-field{inset:9% -24% 7% 27%;opacity:.85}}
+
 </style>
 </head>
 <body>
