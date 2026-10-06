@@ -443,6 +443,84 @@
     .time-display{ font-size:min(18vw,92px); }
     .status-strip{ gap:4px; }
   }
+
+
+  /* ---------- V21 RESPONSIVE CINEMATIC COMPOSITION ---------- */
+  /* Athlete + timer now move as one composition instead of letting the athlete fall off-screen. */
+  main{overflow:hidden;isolation:isolate;}
+  main::before{
+    background-position:clamp(28px,5vw,86px) center;
+    background-size:clamp(310px,34vw,510px) auto;
+    opacity:.9;
+    filter:drop-shadow(0 0 14px rgba(255,35,35,.32)) drop-shadow(0 0 34px rgba(190,0,0,.18));
+  }
+  main[data-athlete="run"]::before,
+  main[data-athlete="hiit"]::before{
+    background-size:clamp(390px,43vw,625px) auto;
+    background-position:clamp(18px,3.8vw,66px) center;
+  }
+
+  /* Dense energy environment concentrated at the timer's right edge, then fading outward. */
+  main::after{
+    z-index:1;
+    background:
+      radial-gradient(circle at 72% 42%,rgba(255,245,245,.82) 0 1px,rgba(255,55,55,.62) 2px,transparent 9px),
+      radial-gradient(ellipse at 69% 49%,rgba(255,22,22,.34) 0%,rgba(195,0,0,.18) 19%,rgba(85,0,0,.08) 39%,transparent 61%),
+      radial-gradient(ellipse at 76% 55%,rgba(255,0,0,.19),transparent 42%),
+      radial-gradient(ellipse at 56% 92%,rgba(255,30,30,.24),rgba(130,0,0,.11) 30%,transparent 62%),
+      linear-gradient(154deg,transparent 45%,rgba(255,20,20,.12) 45.3%,transparent 45.8%),
+      linear-gradient(166deg,transparent 54%,rgba(255,80,80,.18) 54.3%,transparent 54.7%),
+      linear-gradient(187deg,transparent 60%,rgba(255,25,25,.11) 60.3%,transparent 60.8%);
+    pointer-events:none;
+  }
+  .energy-field{
+    inset:-2% -4% -3% 42%;
+    opacity:1;
+    background:
+      radial-gradient(circle at 42% 43%,rgba(255,255,255,.34) 0 1px,rgba(255,38,38,.72) 2px,transparent 10px),
+      radial-gradient(ellipse at 45% 48%,rgba(255,25,25,.34) 0%,rgba(165,0,0,.17) 27%,transparent 58%),
+      radial-gradient(ellipse at 74% 55%,rgba(255,0,0,.23) 0%,rgba(115,0,0,.10) 33%,transparent 62%),
+      radial-gradient(ellipse at 45% 91%,rgba(255,38,38,.30) 0%,rgba(150,0,0,.13) 31%,transparent 61%),
+      repeating-linear-gradient(154deg,transparent 0 38px,rgba(250,1,1,.19) 39px 40px,transparent 41px 78px);
+    filter:drop-shadow(0 0 18px rgba(210,0,0,.12));
+    -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 10%,#000 96%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0%,#000 10%,#000 96%,transparent 100%);
+  }
+  .energy-field::before{
+    top:37%;right:-10%;width:94%;height:3px;
+    background:linear-gradient(90deg,transparent,rgba(255,25,25,.28) 18%,rgba(255,65,65,.92) 58%,rgba(255,225,225,.98) 69%,rgba(255,40,40,.52) 75%,transparent 100%);
+    box-shadow:0 0 9px rgba(255,80,80,.9),0 0 28px rgba(250,1,1,.55),0 0 60px rgba(180,0,0,.25);
+    transform:rotate(-14deg);
+  }
+  .energy-field::after{
+    top:67%;right:-4%;width:82%;height:2px;
+    background:linear-gradient(90deg,transparent,rgba(255,25,25,.22) 24%,rgba(255,80,80,.76) 63%,rgba(255,210,210,.82) 72%,transparent 100%);
+    box-shadow:0 0 8px rgba(255,50,50,.72),0 0 24px rgba(250,1,1,.42);
+    transform:rotate(9deg);
+  }
+  .ring-wrap{
+    box-shadow:inset 0 0 0 1px rgba(203,207,213,.05),0 18px 52px rgba(0,0,0,.52),0 0 58px rgba(250,1,1,.24),0 0 105px rgba(170,0,0,.13),0 34px 74px rgba(160,0,0,.16);
+  }
+
+  @media(max-width:1100px){
+    main::before{background-position:clamp(34px,5vw,58px) center;background-size:clamp(280px,35vw,420px) auto;}
+    main[data-athlete="run"]::before,main[data-athlete="hiit"]::before{background-position:clamp(22px,4vw,48px) center;background-size:clamp(340px,42vw,500px) auto;}
+    .ring-wrap{width:min(58vw,440px);transform:translateX(8vw);}
+    .energy-field{inset:-1% -5% -2% 37%;}
+  }
+  @media(max-width:800px){
+    main::before{background-position:28px center;background-size:min(42vw,330px) auto;opacity:.78;}
+    main[data-athlete="run"]::before,main[data-athlete="hiit"]::before{background-position:18px center;background-size:min(49vw,380px) auto;}
+    .ring-wrap{width:min(61vw,390px);transform:translateX(10vw);}
+    .energy-field{inset:0 -7% 0 31%;opacity:.92;}
+  }
+  @media(max-width:600px){
+    main::before{background-position:12px center;background-size:min(48vw,270px) auto;opacity:.60;}
+    main[data-athlete="run"]::before,main[data-athlete="hiit"]::before{background-position:8px center;background-size:min(55vw,310px) auto;}
+    .ring-wrap{width:min(72vw,345px);transform:translateX(10vw);}
+    .energy-field{inset:2% -10% 1% 25%;opacity:.76;}
+  }
+
 </style>
 </head>
 <body>
