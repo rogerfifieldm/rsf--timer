@@ -521,6 +521,68 @@
     .energy-field{inset:2% -10% 1% 25%;opacity:.76;}
   }
 
+
+  /* ---------- V22 REFERENCE-MATCH LIGHTING ---------- */
+  /* Darker distance field; energy is concentrated around the timer instead of spanning the page. */
+  main::after{
+    background:
+      radial-gradient(circle at 64% 31%,rgba(255,255,255,.98) 0 2px,rgba(255,105,105,.95) 3px,rgba(255,0,0,.48) 7px,transparent 18px),
+      radial-gradient(circle at 65% 32%,rgba(255,20,20,.26),transparent 10%),
+      radial-gradient(ellipse at 56% 52%,rgba(220,0,0,.17) 0%,rgba(90,0,0,.08) 31%,transparent 57%),
+      radial-gradient(ellipse at 55% 91%,rgba(255,28,28,.24),rgba(120,0,0,.10) 31%,transparent 58%);
+  }
+  .energy-field{
+    inset:10% 2% 7% 43%;
+    opacity:.98;
+    background:
+      radial-gradient(circle at 34% 31%,rgba(255,255,255,.95) 0 1px,rgba(255,55,55,.75) 2px,transparent 8px),
+      radial-gradient(circle at 38% 39%,rgba(255,75,75,.82) 0 1px,transparent 5px),
+      radial-gradient(circle at 44% 46%,rgba(255,35,35,.68) 0 1px,transparent 4px),
+      radial-gradient(circle at 48% 57%,rgba(255,50,50,.58) 0 1px,transparent 4px),
+      radial-gradient(circle at 37% 69%,rgba(255,30,30,.56) 0 1px,transparent 4px),
+      radial-gradient(ellipse at 33% 48%,rgba(255,20,20,.28),rgba(145,0,0,.12) 31%,transparent 58%),
+      conic-gradient(from 305deg at 31% 50%,transparent 0 4deg,rgba(255,55,55,.28) 4.4deg 4.8deg,transparent 5.2deg 10deg,rgba(255,18,18,.18) 10.3deg 10.7deg,transparent 11deg 17deg,rgba(255,115,115,.24) 17.3deg 17.7deg,transparent 18deg 26deg,rgba(255,22,22,.15) 26.3deg 26.7deg,transparent 27deg 360deg);
+    filter:drop-shadow(0 0 15px rgba(220,0,0,.18));
+    -webkit-mask-image:radial-gradient(ellipse at 28% 50%,#000 0 36%,rgba(0,0,0,.9) 51%,transparent 78%);
+            mask-image:radial-gradient(ellipse at 28% 50%,#000 0 36%,rgba(0,0,0,.9) 51%,transparent 78%);
+  }
+  /* Short hot streaks radiating from the ring instead of long page-wide lines. */
+  .energy-field::before{
+    top:31%;left:17%;right:auto;width:62%;height:2px;
+    background:linear-gradient(90deg,rgba(255,255,255,.95),rgba(255,80,80,.82) 7%,rgba(255,18,18,.42) 35%,transparent 100%);
+    box-shadow:0 0 8px rgba(255,255,255,.65),0 0 20px rgba(255,20,20,.75),0 0 42px rgba(220,0,0,.35);
+    transform:rotate(-18deg);transform-origin:left center;
+  }
+  .energy-field::after{
+    top:66%;left:15%;right:auto;width:58%;height:2px;
+    background:linear-gradient(90deg,rgba(255,165,165,.86),rgba(255,38,38,.62) 12%,rgba(255,0,0,.26) 42%,transparent 100%);
+    box-shadow:0 0 7px rgba(255,80,80,.6),0 0 22px rgba(220,0,0,.42);
+    transform:rotate(15deg);transform-origin:left center;
+  }
+  /* Brighter floor contact/reflection like the six-screen reference. */
+  .ring-wrap::after{
+    left:-3%;right:-3%;height:26%;bottom:-14%;
+    background:radial-gradient(ellipse,rgba(255,105,105,.40) 0 3%,rgba(255,15,15,.31) 13%,rgba(150,0,0,.16) 39%,transparent 70%);
+    filter:blur(10px);transform:scaleX(1.22);
+  }
+  /* Slight red rim-light ties athlete art into the same environment. */
+  main::before{filter:drop-shadow(0 0 10px rgba(255,65,65,.42)) drop-shadow(0 0 28px rgba(205,0,0,.25));}
+
+  @media(max-width:1100px){
+    .ring-wrap{transform:translateX(7vw);}
+    .energy-field{inset:9% -4% 7% 40%;}
+  }
+  @media(max-width:800px){
+    main::before{background-position:clamp(18px,3vw,28px) center;}
+    .ring-wrap{width:min(60vw,390px);transform:translateX(9vw);}
+    .energy-field{inset:10% -8% 8% 36%;}
+  }
+  @media(max-width:600px){
+    main::before{background-position:10px center;}
+    .ring-wrap{width:min(70vw,340px);transform:translateX(9vw);}
+    .energy-field{inset:12% -12% 10% 32%;opacity:.82;}
+  }
+
 </style>
 </head>
 <body>
