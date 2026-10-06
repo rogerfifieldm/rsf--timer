@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rsf-timer-v19-contour-beam';
+const CACHE_NAME = 'rsf-timer-v20-controls-cinematic';
 const ASSETS = [
   './', './index.html', './timer.js',
   './athlete-kickbox.png', './athlete-boxing.png', './athlete-hiit.png',
