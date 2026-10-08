@@ -720,6 +720,32 @@ main .ring-wrap{
  main::before{background-size:53vw auto !important;}
 }
 
+
+/* V28: clean, athlete-free color-selectable cinematic environment */
+:root{--theme-hue:0deg;--theme-color:#fa0101}
+main{background:#060708 !important;position:relative;isolation:isolate}
+main::before,main[data-athlete]::before{display:none !important;content:none !important}
+main::after{
+ content:"" !important;display:block !important;position:absolute !important;
+ inset:0 !important;pointer-events:none !important;z-index:0 !important;
+ background:url("./rsf-cinematic-bg-v27.jpg") center center / cover no-repeat !important;
+ filter:hue-rotate(var(--theme-hue)) !important;
+ opacity:.94 !important;
+}
+main .ring-wrap{position:relative;z-index:2 !important;transform:none !important;
+ margin-inline:auto !important}
+.ring-progress{stroke:var(--theme-color) !important;
+ filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 9px var(--theme-color)) !important}
+.btn.primary{background:var(--theme-color) !important;border-color:var(--theme-color) !important}
+.theme-choices{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:14px}
+.theme-choice{display:flex;flex-direction:column;align-items:center;gap:8px;
+ background:#19191b;color:#cbd0d5;border:2px solid #3c3c42;border-radius:12px;
+ padding:12px 4px;font:600 12px 'Rajdhani',sans-serif;cursor:pointer}
+.theme-choice::before{content:"";width:26px;height:26px;border-radius:50%;
+ background:var(--swatch);box-shadow:0 0 12px var(--swatch)}
+.theme-choice[aria-pressed="true"]{border-color:#fff;background:#2a2b2f;color:#fff}
+@media(max-width:450px){.theme-choices{gap:5px}.theme-choice{font-size:10px;padding:10px 2px}}
+
 </style>
 
 </head>
@@ -803,6 +829,17 @@ main .ring-wrap{
     <button class="btn ghost page-close" id="closeSettingsBtn">Back</button>
   </div>
   <div class="page-card">
+    <h3>Background Color</h3>
+    <p style="color:var(--silver-mid);">Choose your cinematic color. Your choice is saved on this device.</p>
+    <div class="theme-choices" role="group" aria-label="Background color">
+      <button class="theme-choice" type="button" data-theme="red" style="--swatch:#fa0101" aria-pressed="true">Red</button>
+      <button class="theme-choice" type="button" data-theme="blue" style="--swatch:#158dff" aria-pressed="false">Blue</button>
+      <button class="theme-choice" type="button" data-theme="green" style="--swatch:#20d66b" aria-pressed="false">Green</button>
+      <button class="theme-choice" type="button" data-theme="purple" style="--swatch:#ae64ff" aria-pressed="false">Purple</button>
+      <button class="theme-choice" type="button" data-theme="gold" style="--swatch:#f5b82e" aria-pressed="false">Gold</button>
+    </div>
+  </div>
+  <div class="page-card">
     <h3>Support</h3>
     <a href="mailto:fifielddigital@gmail.com" style="color:var(--red); text-decoration:none;">fifielddigital@gmail.com</a>
   </div>
@@ -842,6 +879,29 @@ main .ring-wrap{
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     });
   }
+</script>
+<script>
+(function(){
+ const themes={
+  red:{hue:'0deg',color:'#fa0101'},
+  blue:{hue:'205deg',color:'#158dff'},
+  green:{hue:'110deg',color:'#20d66b'},
+  purple:{hue:'275deg',color:'#ae64ff'},
+  gold:{hue:'45deg',color:'#f5b82e'}
+ };
+ const key='rsf-round-timer-theme';
+ function apply(name){
+  if(!themes[name])name='red';
+  document.documentElement.style.setProperty('--theme-hue',themes[name].hue);
+  document.documentElement.style.setProperty('--theme-color',themes[name].color);
+  document.documentElement.style.setProperty('--red',themes[name].color);
+  document.querySelectorAll('.theme-choice').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.theme===name)));
+  try{localStorage.setItem(key,name)}catch(e){}
+ }
+ let saved='red';try{saved=localStorage.getItem(key)||'red'}catch(e){}
+ apply(saved);
+ document.querySelectorAll('.theme-choice').forEach(b=>b.addEventListener('click',()=>apply(b.dataset.theme)));
+})();
 </script>
 <script src="timer.js"></script>
 </body>
