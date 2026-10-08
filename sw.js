@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rsf-timer-v27-balance';
+const CACHE_NAME = 'rsf-timer-v28-themes';
 const ASSETS = [
   './', './index.html', './timer.js', './rsf-cinematic-bg-v27.jpg',
   './athlete-kickbox.png', './athlete-boxing.png', './athlete-hiit.png',
