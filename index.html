@@ -643,8 +643,45 @@
   @media(max-width:800px){.app-title::before,.app-title::after{width:36px}.energy-field{inset:7% -16% 5% 31%}}
   @media(max-width:600px){.app-title{font-size:21px}.app-title::before,.app-title::after{display:none}.energy-field{inset:9% -24% 7% 27%;opacity:.85}}
 
+
+  /* V26: image-first cinematic composition, no old procedural FX. */
+  main {
+    background: #070707 url("./rsf-cinematic-bg.jpg") center center / cover no-repeat !important;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  main::after { content: none !important; display: none !important; }
+  .energy-field, .energy-field::before, .energy-field::after { display: none !important; }
+  main::before {
+    z-index: 1 !important;
+    filter: drop-shadow(0 0 9px rgba(255,95,95,.35))
+            drop-shadow(0 0 22px rgba(170,0,0,.35)) !important;
+  }
+  main .ring-wrap {
+    z-index: 3 !important;
+    border: clamp(6px, .85vw, 12px) solid #0c0d0f !important;
+    background: radial-gradient(circle at 50% 48%,#111214 0 68%,#060708 70%,#31363a 74%,#0a0b0c 78%,#8d9398 80%,#121416 83%,#060708 100%) !important;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.11),
+      inset 0 0 20px #050506, 0 0 0 2px #aeb4b9, 0 0 0 5px #292d31,
+      0 0 0 8px #08090a, 0 0 25px rgba(255,0,0,.52),
+      0 0 55px rgba(150,0,0,.28), 0 24px 48px rgba(0,0,0,.7) !important;
+  }
+  .ring-wrap::before {
+    content:"" !important; position:absolute !important; inset:-10px !important;
+    border-radius:50% !important; padding:5px !important;
+    background:conic-gradient(from 210deg,#0a0b0c 0 9%,#60666c 11%,#e2e5e8 13%,#444a50 15%,#090a0b 20% 47%,#51575d 49%,#fff 51%,#5c6268 53%,#090a0b 58% 85%,#545b61 88%,#d7dce0 90%,#121416 94% 100%) !important;
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0) !important;
+    -webkit-mask-composite:xor !important; mask-composite:exclude !important;
+    pointer-events:none !important; animation:none !important;
+  }
+  .ring-wrap::after { display:none !important; }
+  .ring-track { stroke:#1c1e21 !important; stroke-width:8 !important; }
+  .ring-progress { stroke-width:6 !important; filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 9px #fa0101) !important; }
+  @media(max-width:800px){main{background-position:58% center !important;}}
+  @media(max-width:600px){main{background-position:62% center !important;}}
+
 </style>
-\n<style id="v25-clean-background">\n/* V25: one artwork background + live athlete + live timer. Old generated FX are disabled. */\nmain{\n  background:#070707 url('./rsf-cinematic-bg.jpg') center center/cover no-repeat !important;\n  isolation:isolate; overflow:hidden;\n}\nmain::after{content:none !important;display:none !important;}\n.energy-field{display:none !important;}\n/* Athlete remains mode-specific and sits above artwork, behind the timer. */\nmain::before{z-index:1 !important;filter:drop-shadow(0 0 7px rgba(255,120,120,.45)) drop-shadow(0 0 24px rgba(220,0,0,.40)) !important;}\n.ring-wrap{\n  z-index:3 !important;\n  border:clamp(7px,1vw,13px) solid #08090a !important;\n  background:radial-gradient(circle at 50% 47%,#111214 0 67%,#050607 68% 71%,#33373b 72% 74%,#0b0c0d 75% 77%,#858b91 78% 79%,#181a1c 80% 82%,#050607 83% 100%) !important;\n  box-shadow:\n    inset 0 0 0 2px rgba(255,255,255,.08),\n    inset 0 0 0 5px rgba(0,0,0,.88),\n    inset 0 0 34px rgba(0,0,0,.92),\n    0 0 0 2px #a9afb5,\n    0 0 0 5px #24272a,\n    0 0 0 8px #070809,\n    0 0 18px rgba(255,255,255,.18),\n    0 0 38px rgba(250,1,1,.52),\n    0 0 85px rgba(190,0,0,.32),\n    0 30px 58px rgba(0,0,0,.72) !important;\n}\n/* Chrome highlight on housing; moving red/silver contour beam remains on the SVG progress ring. */\n.ring-wrap::before{\n  content:"" !important;position:absolute !important;inset:-10px !important;border-radius:50% !important;padding:5px !important;\n  background:conic-gradient(from 215deg,#111 0 8%,#4e5358 10%,#d9dde0 12%,#555b61 14%,#0a0b0c 20% 45%,#3d4247 49%,#f5f7f8 51%,#747a80 53%,#090a0b 59% 82%,#50565c 87%,#e4e7e9 89%,#35393d 91%,#111 100%) !important;\n  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0) !important;\n  -webkit-mask-composite:xor !important;mask-composite:exclude !important;\n  filter:drop-shadow(0 0 5px rgba(255,255,255,.25)) drop-shadow(0 0 12px rgba(250,1,1,.35)) !important;\n  pointer-events:none !important;\n}\n.ring-wrap::after{content:"" !important;display:block !important;left:-18% !important;right:-18% !important;height:24% !important;bottom:-18% !important;background:radial-gradient(ellipse,rgba(255,255,255,.55) 0 1%,rgba(255,40,40,.55) 4%,rgba(160,0,0,.28) 24%,transparent 68%) !important;filter:blur(9px) !important;}\n.ring-track{stroke:#17191b !important;stroke-width:8 !important;filter:drop-shadow(0 0 2px rgba(255,255,255,.22)) !important;}\n.ring-progress{stroke-width:6 !important;filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 8px #fa0101) drop-shadow(0 0 15px rgba(250,1,1,.75)) !important;}\n@media(max-width:800px){main{background-position:58% center !important;}}\n@media(max-width:600px){main{background-position:62% center !important;}}\n</style>\n
+
 </head>
 <body>
 <div id="app">
