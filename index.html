@@ -680,6 +680,46 @@
   @media(max-width:800px){main{background-position:58% center !important;}}
   @media(max-width:600px){main{background-position:62% center !important;}}
 
+
+/* V27: balanced cinematic backdrop and coordinated athlete/timer sizing. */
+main{
+ background:#060708 url("./rsf-cinematic-bg-v27.jpg") center center / cover no-repeat !important;
+}
+main::before{
+ opacity:.93 !important;
+ background-position:clamp(18px,5vw,90px) center !important;
+ background-size:clamp(280px,32vw,490px) auto !important;
+ /* Fade the PNG's rectangular artwork edge, without dimming its center. */
+ -webkit-mask-image:radial-gradient(ellipse 67% 62% at 43% 50%,#000 0 61%,rgba(0,0,0,.88) 76%,transparent 100%) !important;
+ mask-image:radial-gradient(ellipse 67% 62% at 43% 50%,#000 0 61%,rgba(0,0,0,.88) 76%,transparent 100%) !important;
+ filter:drop-shadow(0 0 8px rgba(255,75,75,.16)) !important;
+}
+main[data-athlete="run"]::before,main[data-athlete="hiit"]::before{
+ background-size:clamp(310px,35vw,525px) auto !important;
+}
+main .ring-wrap{
+ width:clamp(270px,29vw,430px) !important;
+ transform:translateX(clamp(35px,5vw,100px)) !important;
+ box-shadow:inset 0 0 0 2px rgba(255,255,255,.14),inset 0 0 15px #030405,
+ 0 0 0 2px #a7adb3,0 0 0 5px #24292d,0 0 0 8px #08090b,
+ 0 0 19px rgba(255,0,0,.31),0 18px 42px rgba(0,0,0,.8) !important;
+}
+@media(max-width:1050px){
+ main::before{background-size:clamp(240px,37vw,390px) auto !important;background-position:clamp(8px,3vw,36px) center !important;}
+ main[data-athlete="run"]::before,main[data-athlete="hiit"]::before{background-size:clamp(270px,41vw,430px) auto !important;}
+ main .ring-wrap{width:clamp(270px,43vw,390px) !important;transform:translateX(clamp(35px,8vw,75px)) !important;}
+}
+@media(max-width:650px){
+ main{background-position:57% center !important;}
+ main::before{background-size:clamp(190px,49vw,290px) auto !important;background-position:2vw center !important;opacity:.84 !important;}
+ main[data-athlete="run"]::before,main[data-athlete="hiit"]::before{background-size:clamp(220px,54vw,320px) auto !important;}
+ main .ring-wrap{width:clamp(235px,65vw,335px) !important;transform:translateX(10vw) !important;}
+}
+@media(max-width:400px){
+ main .ring-wrap{width:65vw !important;transform:translateX(11vw) !important;}
+ main::before{background-size:53vw auto !important;}
+}
+
 </style>
 
 </head>
