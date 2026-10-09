@@ -762,6 +762,7 @@ main .ring-wrap{position:relative;z-index:2 !important;transform:none !important
 <div id="app">
   <header>
     <div style="display:flex; gap:8px; margin-left:auto;">
+      <button class="icon-btn" id="plansBtn" type="button" aria-label="View pricing plans">PLANS</button>
       <button class="icon-btn" id="shareBtn">SHARE</button>
       <button class="icon-btn" id="modeBtn">MODE</button>
       <button class="icon-btn" id="settingsBtn" aria-label="Settings">&#9881;</button>
@@ -854,7 +855,13 @@ main .ring-wrap{position:relative;z-index:2 !important;transform:none !important
   </div>
   <div class="page-card">
     <h3>Support</h3>
-    <a href="mailto:fifielddigital@gmail.com" style="color:var(--red); text-decoration:none;">fifielddigital@gmail.com</a>
+    <p style="color:var(--silver-mid); margin-bottom:8px;">For app support, email:</p>
+    <a href="mailto:fifielddigital@gmail.com?subject=RSF%20Round%20Timer%20Support" style="color:var(--red); text-decoration:underline; overflow-wrap:anywhere;">fifielddigital@gmail.com</a>
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <button type="button" id="copySupportEmail" class="btn ghost" style="padding:9px 16px; width:auto;">Copy Email Address</button>
+      <span id="copySupportStatus" role="status" aria-live="polite" style="color:var(--silver-mid); font-size:14px;"></span>
+    </div>
+    <p style="color:var(--silver-mid); font-size:13px; margin-top:8px;">If the email link does not open on a shared computer, copy the address and paste it into your email website.</p>
   </div>
   <div class="page-card">
     <h3>Health &amp; Safety</h3>
@@ -863,7 +870,36 @@ main .ring-wrap{position:relative;z-index:2 !important;transform:none !important
   </div>
   <div class="page-card">
     <h3>About</h3>
-    <p style="color:var(--silver-mid);">RSF Round Timer is built and maintained by Fifield Digital for Rocket Strike Fitness.</p>
+    <p style="color:var(--silver-mid);">RSF Round Timer is developed and maintained by Fifield Digital by Roger Fifield for Rocket Strike Fitness.</p>
+  </div>
+</div>
+
+
+<div class="app-page" id="plansPage" aria-hidden="true" aria-label="RSF Round Timer pricing plans">
+  <div class="page-head">
+    <div class="page-title">Plans</div>
+    <button class="btn ghost page-close" id="closePlansBtn" type="button">Back</button>
+  </div>
+  <div class="page-card">
+    <h3>7-Day Free Trial</h3>
+    <p style="color:var(--silver-light);font-size:18px;">Explore RSF Round Timer before choosing a plan.</p>
+    <p style="color:var(--silver-mid);">Trial activation is not yet available. No payment will be collected.</p>
+    <button class="btn ghost" type="button" disabled style="width:100%;opacity:.55;cursor:not-allowed;">Coming Soon</button>
+  </div>
+  <div class="page-card">
+    <h3>Monthly Access — $1.99/month</h3>
+    <p style="color:var(--silver-light);font-size:18px;">Up to 12 monthly payments; $23.88 maximum over 12 months.</p>
+    <p style="color:var(--silver-mid);">Cancel earlier if you choose. Billing stops automatically after payment 12. Access ends at the end of the paid term. No automatic renewal after 12 months.</p>
+    <button class="btn ghost" type="button" disabled style="width:100%;opacity:.55;cursor:not-allowed;">Payments Not Yet Available</button>
+  </div>
+  <div class="page-card">
+    <h3>One-Time Purchase — $14.99</h3>
+    <p style="color:var(--silver-light);font-size:18px;">Pay once for ongoing access to the supported version of RSF Round Timer.</p>
+    <p style="color:var(--silver-mid);">No recurring payments. Subject to final purchase terms.</p>
+    <button class="btn ghost" type="button" disabled style="width:100%;opacity:.55;cursor:not-allowed;">Payments Not Yet Available</button>
+  </div>
+  <div class="page-card">
+    <p style="color:var(--silver-mid);">Preview pricing only. Public launch is on hold pending insurance, legal review, and payment integration. No subscription or trial is activated from this screen.</p>
   </div>
 </div>
 
@@ -877,7 +913,7 @@ main .ring-wrap{position:relative;z-index:2 !important;transform:none !important
   </p>
   <p style="font-family:'Barlow Condensed'; color:var(--silver-light); font-size:16px; line-height:1.6; margin-bottom:18px;">
     Exercise involves inherent risk of injury. By using this app, you acknowledge
-    that <span style="color:var(--red);">Fifield Digital is not responsible</span> for any injury, loss, or damage resulting from your
+    that <span style="color:var(--red);">Fifield Digital by Roger Fifield is not responsible</span> for any injury, loss, or damage resulting from your
     use of this timer or any workout performed alongside it.
   </p>
   <p style="font-family:'Barlow Condensed'; color:var(--silver-light); font-size:16px; line-height:1.6; margin-bottom:28px;">
@@ -936,6 +972,34 @@ main .ring-wrap{position:relative;z-index:2 !important;transform:none !important
  }
  show(fallback);
  fetch('verses.json',{cache:'force-cache'}).then(r=>{if(!r.ok)throw Error('Unavailable');return r.json()}).then(show).catch(()=>{});
+})();
+</script>
+<script>
+  document.getElementById('copySupportEmail')?.addEventListener('click', async () => {
+    const email = 'fifielddigital@gmail.com';
+    const status = document.getElementById('copySupportStatus');
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(email);
+      status.textContent = 'Email address copied!';
+    } catch (_) {
+      status.textContent = 'Select the email address above and copy it manually.';
+    }
+  });
+</script>
+<script>
+/* Pricing preview is intentionally informational only: no checkout or trial activation. */
+(function(){
+  const plans=document.getElementById('plansPage');
+  const open=document.getElementById('plansBtn');
+  const close=document.getElementById('closePlansBtn');
+  if(!plans||!open||!close)return;
+  open.addEventListener('click',()=>{
+    document.querySelectorAll('.app-page.open').forEach(p=>{p.classList.remove('open');p.setAttribute('aria-hidden','true');});
+    plans.classList.add('open');plans.setAttribute('aria-hidden','false');
+    plans.scrollTop=0;
+  });
+  close.addEventListener('click',()=>{plans.classList.remove('open');plans.setAttribute('aria-hidden','true');});
 })();
 </script>
 <script src="timer.js"></script>
